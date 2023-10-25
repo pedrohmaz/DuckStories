@@ -8,18 +8,17 @@
 
     <ImageView
         android:id="@+id/imagemPato"
-        android:layout_width="322dp"
-        android:layout_height="403dp"
+        android:layout_width="243dp"
+        android:layout_height="299dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.195"
+        app:layout_constraintVertical_bias="0.291"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <Button
-        android:id="@+id/botao_pato"
+        android:id="@+id/botaoPato"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:soundEffectsEnabled="false"
@@ -29,4 +28,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagemPato" />
+
+    <TextView
+        android:id="@+id/nomeDoPato"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginTop="32dp"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/imagemPato"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

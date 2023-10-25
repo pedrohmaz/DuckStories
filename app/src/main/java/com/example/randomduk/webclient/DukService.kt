@@ -6,6 +6,6 @@ import retrofit2.http.GET
 interface DukService {
 
     @GET("random")
-    fun quack() : Call<PatoResposta>
+    fun chamarPato() : Call<PatoResposta>
 
 }
