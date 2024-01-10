@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Pato(
-    val url: String?,
+    val url: String? = null,
     val nome: String,
-    @PrimaryKey(autoGenerate = true) val id: Int
+    @PrimaryKey(autoGenerate = true) val id: Int = 0
 
 )
