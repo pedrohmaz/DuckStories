@@ -2,6 +2,8 @@ package com.example.randomduk
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -15,16 +17,15 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
-    val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    val service = RetrofitInit().service
-    var url: String? = null
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val service = RetrofitInit().service
+    private var url: String? = null
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
         gerarPato()
 
         binding.botaoPato.setOnClickListener {
@@ -45,7 +46,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        val pato = Pato(url = url, nome = nomesDePato.random())
-        binding.nomeDoPato.text = pato.nome
+       // val pato = Pato(url = url, nome = nomesDePato.random())
+        binding.nomeDoPato.text = nomesDePato.random()
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.activity_main_menu, menu)
+        return true
+    }
+
+
 }
+
