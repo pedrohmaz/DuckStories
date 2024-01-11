@@ -42,12 +42,24 @@
                 android:id="@+id/listaNomeDoPato"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:layout_marginStart="30dp"
+                android:layout_marginTop="32dp"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@id/rv_image"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Nome do Pato" />
+
+            <ImageButton
+                android:id="@+id/botaoRemoverPato"
+                android:layout_width="51dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/design_default_color_error"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_delete" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
