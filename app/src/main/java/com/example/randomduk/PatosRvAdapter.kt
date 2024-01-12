@@ -16,9 +16,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PatosRvAdapter(private val patos: MutableList<Pato>, private val context: Context) :
+class PatosRvAdapter(val patos: MutableList<Pato>, private val context: Context) :
     RecyclerView.Adapter<PatosRvAdapter.ViewHolder>() {
 
+    //val publicPatos: List<Pato> get() = patos
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nomeDoPato: TextView = itemView.findViewById(R.id.listaNomeDoPato)
@@ -27,12 +28,22 @@ class PatosRvAdapter(private val patos: MutableList<Pato>, private val context: 
 
     }
 
-    private fun removerItem(i: Int) {
-        CoroutineScope(Dispatchers.IO).launch{
-        AppDatabase.getInstance(context).dao().removePato(patos[i])
-            withContext(Dispatchers.Main){
-            patos.removeAt(i)
+    fun removerItem(i: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            AppDatabase.getInstance(context).dao().removePato(patos[i])
+            withContext(Dispatchers.Main) {
+                patos.removeAt(i)
+                notifyDataSetChanged()
+            }
+        }
+    }
+
+    fun adicionarItem(p: Pato, i: Int) {
+        CoroutineScope(Dispatchers.Main).launch {
+            patos.add(i, p)
             notifyDataSetChanged()
+            withContext(Dispatchers.IO) {
+                AppDatabase.getInstance(context).dao().salvarPato(p)
             }
         }
     }
