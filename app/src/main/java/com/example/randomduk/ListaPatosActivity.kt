@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.randomduk.database.AppDatabase
 import com.example.randomduk.databinding.ActivityListaPatosBinding
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ListaPatosActivity : AppCompatActivity() {
@@ -22,29 +21,30 @@ class ListaPatosActivity : AppCompatActivity() {
         super.onStart()
         setContentView(binding.root)
         rvSetup()
-
-
     }
 
     private fun rvSetup() {
         val rvPatos = binding.patosRv
-        lateinit var adapter: PatosRvAdapter
-        lifecycleScope.launch(Dispatchers.IO) {
-            adapter = PatosRvAdapter(dao.buscaPatos(), this@ListaPatosActivity)
-            rvPatos.adapter = adapter
-        }
+       lateinit var adapter: PatosRvAdapter
+        lifecycleScope.launch {
+            dao.buscaPatos().collect {
+                    adapter = PatosRvAdapter(it, this@ListaPatosActivity)
+                    rvPatos.adapter = adapter
+                }
+            }
+
         val swipeDelete = object : SwipeToDeleteCallback() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val pos = viewHolder.adapterPosition
                 val item = adapter.patos[pos]
-                adapter.removerItem(pos)
+                adapter.removerItem(pos, lifecycleScope)
                 Snackbar.make(
                     binding.root,
                     "Pato '${adapter.patos[pos].nome}' removido",
                     Snackbar.LENGTH_SHORT
                 ).apply {
                     setAction("Undo") {
-                        adapter.adicionarItem(item, pos)
+                        adapter.adicionarItem(item, lifecycleScope)
                     }
                     show()
                 }
@@ -52,6 +52,7 @@ class ListaPatosActivity : AppCompatActivity() {
         }
         val touchHelper = ItemTouchHelper(swipeDelete)
         touchHelper.attachToRecyclerView(rvPatos)
-        rvPatos.layoutManager = LinearLayoutManager(this)
+        rvPatos.layoutManager = LinearLayoutManager(this@ListaPatosActivity)
     }
 }
+

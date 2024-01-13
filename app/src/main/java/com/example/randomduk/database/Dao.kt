@@ -5,17 +5,18 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.randomduk.Pato
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface Dao {
 
     @Query("SELECT * FROM pato")
-    fun buscaPatos(): MutableList<Pato>
+    fun buscaPatos(): Flow<List<Pato>>
 
     @Insert
-    fun salvarPato(pato: Pato)
+    suspend fun salvarPato(pato: Pato)
 
     @Delete
-    fun removePato(pato: Pato)
+    suspend fun removePato(pato: Pato)
 
 }

@@ -33,14 +33,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        Log.i("TAG", "onCreate: ${nomesDePato.size}")
         gerarPato()
+        aoClicarBotaoQuack()
 
+    }
+
+    private fun aoClicarBotaoQuack() {
         binding.botaoPato.setOnClickListener {
             val quackSound = MediaPlayer.create(this, R.raw.quack_sound)
             quackSound.start()
             gerarPato()
         }
-
     }
 
     private fun gerarPato() {
@@ -69,7 +73,7 @@ class MainActivity : AppCompatActivity() {
            R.id.salvar_pato -> {
                val nome = binding.nomeDoPato.text.toString()
                val url = url
-               lifecycleScope.launch(Dispatchers.IO) {
+               lifecycleScope.launch {
                dao.salvarPato(Pato(nome = nome, url = url))}
                Toast.makeText(this, "Pato salvo", Toast.LENGTH_SHORT).show()
                true
