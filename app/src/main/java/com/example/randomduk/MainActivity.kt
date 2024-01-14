@@ -9,55 +9,47 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.randomduk.data.nomesDePato
-import com.example.randomduk.database.AppDatabase
 import com.example.randomduk.databinding.ActivityMainBinding
-import com.example.randomduk.webclient.RetrofitInit
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.randomduk.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val db by lazy { AppDatabase.getInstance(this) }
-    private val dao by lazy {db.dao()}
-    private val service = RetrofitInit().service
-    private var url: String? = null
 
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private lateinit var viewModel: MainViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        Log.i("TAG", "onCreate: ${nomesDePato.size}")
-        gerarPato()
+        vmSetup()
         aoClicarBotaoQuack()
+    }
 
+
+    private fun vmSetup() {
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        Log.i("TAG", "onCreate: ${nomesDePato.size}")
+
+        viewModel.url.observe(this) { imageUrl ->
+            imageUrl?.let {
+                Glide.with(this).load(it).into(binding.imagemPato)
+            }
+        }
+        viewModel.nomeDoPato.observe(this) { nomeDoPato ->
+            binding.nomeDoPato.text = nomeDoPato
+        }
     }
 
     private fun aoClicarBotaoQuack() {
         binding.botaoPato.setOnClickListener {
             val quackSound = MediaPlayer.create(this, R.raw.quack_sound)
             quackSound.start()
-            gerarPato()
+           viewModel.gerarPato()
         }
-    }
-
-    private fun gerarPato() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val response = service.chamarPato().execute()
-            response.body()?.let {
-                withContext(Main) {
-                    this@MainActivity.url  = response.body()!!.url
-                    Glide.with(this@MainActivity).load(url).into(binding.imagemPato)
-                }
-            }
-        }
-        binding.nomeDoPato.text = nomesDePato.random()
     }
 
 
@@ -71,10 +63,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
        return when(item.itemId) {
            R.id.salvar_pato -> {
-               val nome = binding.nomeDoPato.text.toString()
-               val url = url
-               lifecycleScope.launch {
-               dao.salvarPato(Pato(nome = nome, url = url))}
+             viewModel.salvarPato()
                Toast.makeText(this, "Pato salvo", Toast.LENGTH_SHORT).show()
                true
            }
