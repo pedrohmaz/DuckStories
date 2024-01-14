@@ -10,6 +10,8 @@ import com.example.randomduk.data.nomesDePato
 import com.example.randomduk.database.AppDatabase
 import com.example.randomduk.webclient.RetrofitInit
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -17,11 +19,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val dao by lazy { AppDatabase.getInstance(application).dao() }
     private val service = RetrofitInit().service
-    private val _url = MutableLiveData<String?>()
-    val url: LiveData<String?> get() = _url
+    private val _url = MutableStateFlow<String?>(null)
+    val url: StateFlow<String?> get() = _url
 
-    private val _nomeDoPato = MutableLiveData<String>()
-    val nomeDoPato: LiveData<String> get() = _nomeDoPato
+    private val _nomeDoPato = MutableStateFlow<String?>(null)
+    val nomeDoPato: StateFlow<String?> get() = _nomeDoPato
 
     init {
         gerarPato()
@@ -36,7 +38,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
         }
-        _nomeDoPato.postValue(nomesDePato.random())
+        _nomeDoPato.value = nomesDePato.random()
     }
 
     fun salvarPato() {

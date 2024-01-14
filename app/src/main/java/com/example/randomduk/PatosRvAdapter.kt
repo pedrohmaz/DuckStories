@@ -10,36 +10,38 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.randomduk.database.AppDatabase
+import com.example.randomduk.databinding.ListaPatosRecyclerViewItemBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 
 class PatosRvAdapter(private val context: Context) :
     RecyclerView.Adapter<PatosRvAdapter.ViewHolder>() {
 
-    var patos: List<Pato> = emptyList()
+    var patos = MutableStateFlow<List<Pato>>(emptyList())
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nomeDoPato: TextView = itemView.findViewById(R.id.listaNomeDoPato)
-        var fotoDoPato: ImageView = itemView.findViewById(R.id.listaFotoDoPato)
+    inner class ViewHolder(binding: ListaPatosRecyclerViewItemBinding):
+        RecyclerView.ViewHolder(binding.root) {
+        val nomeDoPato: TextView = binding.listaNomeDoPato
+        var fotoDoPato: ImageView = binding.listaFotoDoPato
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.lista_patos_recycler_view_item, parent, false)
-        return ViewHolder(view)
+        val binding = ListaPatosRecyclerViewItemBinding.inflate(LayoutInflater.from(parent.context),
+            parent,
+            false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-        return patos.size
+        return patos.value.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        holder.nomeDoPato.text = patos[position].nome
-        Glide.with(context).load(patos[position].url).into(holder.fotoDoPato)
-
-
+        holder.nomeDoPato.text = patos.value[position].nome
+        Glide.with(context).load(patos.value[position].url).into(holder.fotoDoPato)
     }
 
 }

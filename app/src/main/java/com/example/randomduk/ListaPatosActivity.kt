@@ -1,6 +1,7 @@
 package com.example.randomduk
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -28,12 +29,13 @@ class ListaPatosActivity : AppCompatActivity() {
         val rvPatos = binding.patosRv
         val adapter = PatosRvAdapter(this@ListaPatosActivity)
         lifecycleScope.launch {
-            viewModel.listaPatos.observe(this@ListaPatosActivity){
-                adapter.patos = it
-                adapter.notifyDataSetChanged()
+            viewModel.listaPatos.collect{
+                it?.let { adapter.patos.value = it
+                    Log.i("TAG", "rvSetup: valor modificado")
+                }
+                rvPatos.adapter = adapter
             }
         }
-        rvPatos.adapter = adapter
         rvPatos.layoutManager = LinearLayoutManager(this@ListaPatosActivity)
         swipeController(adapter, rvPatos)
     }
@@ -45,11 +47,11 @@ class ListaPatosActivity : AppCompatActivity() {
         val swipeDelete = object : SwipeToDeleteCallback() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val pos = viewHolder.adapterPosition
-                val item = adapter.patos[pos]
+                val item = adapter.patos.value[pos]
                 viewModel.removerPato(item)
                 Snackbar.make(
                     binding.root,
-                    "Pato '${adapter.patos[pos].nome}' removido",
+                    "Pato '${adapter.patos.value[pos].nome}' removido",
                     Snackbar.LENGTH_SHORT
                 ).apply {
                     setAction("Undo") {

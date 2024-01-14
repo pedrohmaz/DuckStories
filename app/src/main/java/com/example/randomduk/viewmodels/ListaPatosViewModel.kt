@@ -7,13 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.randomduk.Pato
 import com.example.randomduk.database.AppDatabase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class ListaPatosViewModel(application: Application) : AndroidViewModel(application) {
 
     private val dao by lazy { AppDatabase.getInstance(application).dao() }
-    private val _listaPatos = MutableLiveData<List<Pato>>()
-    val listaPatos: LiveData<List<Pato>> get() = _listaPatos
+    private val _listaPatos = MutableStateFlow<List<Pato>?>(null)
+    val listaPatos: StateFlow<List<Pato>?> get() = _listaPatos
 
     init {
         buscarPatos()
