@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "908552292600",
+    "project_id": "duckstories-f8ccb",
+    "storage_bucket": "duckstories-f8ccb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908552292600:android:ecee9699646dbc37a7530d",
+        "android_client_info": {
+          "package_name": "com.example.randomduk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_YNLxBgjpWcIjB4KAOH5IL-Tl--gvpOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

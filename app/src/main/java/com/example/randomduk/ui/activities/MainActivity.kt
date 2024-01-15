@@ -1,4 +1,4 @@
-package com.example.randomduk
+package com.example.randomduk.ui.activities
 
 import android.content.Intent
 import android.media.MediaPlayer
@@ -12,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.randomduk.R
 import com.example.randomduk.data.nomesDePato
 import com.example.randomduk.databinding.ActivityMainBinding
-import com.example.randomduk.viewmodels.MainViewModel
-import kotlinx.coroutines.isActive
+import com.example.randomduk.ui.viewmodels.MainViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {

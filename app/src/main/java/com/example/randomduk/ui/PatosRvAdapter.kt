@@ -1,20 +1,16 @@
-package com.example.randomduk
+package com.example.randomduk.ui
 
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.randomduk.database.AppDatabase
+import com.example.randomduk.models.Pato
 import com.example.randomduk.databinding.ListaPatosRecyclerViewItemBinding
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 
 class PatosRvAdapter(private val context: Context) :

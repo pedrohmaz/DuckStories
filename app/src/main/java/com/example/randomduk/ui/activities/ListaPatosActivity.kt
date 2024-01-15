@@ -1,4 +1,4 @@
-package com.example.randomduk
+package com.example.randomduk.ui.activities
 
 import android.os.Bundle
 import android.util.Log
@@ -8,9 +8,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.randomduk.database.AppDatabase
+import com.example.randomduk.ui.PatosRvAdapter
+import com.example.randomduk.SwipeToDeleteCallback
 import com.example.randomduk.databinding.ActivityListaPatosBinding
-import com.example.randomduk.viewmodels.ListaPatosViewModel
+import com.example.randomduk.ui.viewmodels.ListaPatosViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 

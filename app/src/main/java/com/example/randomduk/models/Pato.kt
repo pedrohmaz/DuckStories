@@ -1,4 +1,4 @@
-package com.example.randomduk
+package com.example.randomduk.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

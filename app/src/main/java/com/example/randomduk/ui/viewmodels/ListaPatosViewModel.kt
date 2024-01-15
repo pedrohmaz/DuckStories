@@ -1,11 +1,9 @@
-package com.example.randomduk.viewmodels
+package com.example.randomduk.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.randomduk.Pato
+import com.example.randomduk.models.Pato
 import com.example.randomduk.database.AppDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
