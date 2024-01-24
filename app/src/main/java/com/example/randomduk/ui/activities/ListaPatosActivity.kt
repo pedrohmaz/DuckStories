@@ -1,16 +1,15 @@
 package com.example.randomduk.ui.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.randomduk.ui.PatosRvAdapter
 import com.example.randomduk.SwipeToDeleteCallback
 import com.example.randomduk.databinding.ActivityListaPatosBinding
+import com.example.randomduk.ui.PatosRvAdapter
 import com.example.randomduk.ui.viewmodels.ListaPatosViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -30,10 +29,8 @@ class ListaPatosActivity : AppCompatActivity() {
         val rvPatos = binding.patosRv
         val adapter = PatosRvAdapter(this@ListaPatosActivity)
         lifecycleScope.launch {
-            viewModel.listaPatos.collect{
-                it?.let { adapter.patos.value = it
-                    Log.i("TAG", "rvSetup: valor modificado")
-                }
+            viewModel.listaPatos.collect {
+                adapter.patos.value = it
                 rvPatos.adapter = adapter
             }
         }

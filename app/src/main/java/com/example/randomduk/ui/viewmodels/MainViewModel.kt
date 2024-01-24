@@ -1,12 +1,12 @@
 package com.example.randomduk.ui.viewmodels
 
 import android.app.Application
-import android.widget.Toast
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.randomduk.models.Pato
 import com.example.randomduk.data.nomesDePato
 import com.example.randomduk.database.AppDatabase
+import com.example.randomduk.models.Pato
 import com.example.randomduk.webclient.RetrofitInit
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -23,13 +23,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _url = MutableStateFlow<String?>(null)
     val url: StateFlow<String?> get() = _url
     private val remoteDb = Firebase.firestore
-
     private val _nomeDoPato = MutableStateFlow<String?>(null)
     val nomeDoPato: StateFlow<String?> get() = _nomeDoPato
 
     init {
         gerarPato()
-        localToRemote(application)
     }
 
     fun gerarPato() {
@@ -47,28 +45,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun salvarPato() {
         val nome: String? = _nomeDoPato.value
         val url = _url.value
+
         if (!nome.isNullOrEmpty() && !url.isNullOrEmpty()) {
             viewModelScope.launch {
-                dao.salvarPato(Pato(nome = nome, url = url))
+                val pato = Pato(url, nome)
+                val id = dao.salvarPato(pato)
+                Log.i("TAG", "salvarPato: $id")
+                val patoMap = mapOf<String, Any?>("url" to url, "name" to nome, "id" to id)
+                remoteDb.collection("patos").document("$id").set(patoMap)
             }
         }
     }
 
-    private fun localToRemote(context: Application) {
-        val pato = mapOf<String, String?>("url" to null, "name" to "Douglas")
+
+    private fun localToRemote() {
+
         viewModelScope.launch {
-            val patosCollection = remoteDb.collection("patos")
-            patosCollection
-                .add(pato)
-                .addOnSuccessListener {
-                    Toast.makeText(context, "Servidor remoro atualizado", Toast.LENGTH_SHORT).show()
+            dao.buscaPatos().collect { patos ->
+                patos.forEach {
+                    val pato =
+                        mapOf<String, Any?>("url" to it.url, "name" to it.nome, "id" to it.id)
+                    remoteDb.collection("patos")
+                        .add(pato)
                 }
-                .addOnFailureListener {
-                    Toast.makeText(context, "Erro ao atualizar servidor remoto", Toast.LENGTH_SHORT)
-                        .show()
-                }
+
+            }
         }
-
     }
-}
 
+}

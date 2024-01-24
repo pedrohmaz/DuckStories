@@ -14,9 +14,11 @@ interface Dao {
     fun buscaPatos(): Flow<List<Pato>>
 
     @Insert
-    suspend fun salvarPato(pato: Pato)
+    suspend fun salvarPato(pato: Pato): Long
 
     @Delete
     suspend fun removePato(pato: Pato)
+
+
 
 }

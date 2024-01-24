@@ -11,12 +11,13 @@ import com.bumptech.glide.Glide
 import com.example.randomduk.models.Pato
 import com.example.randomduk.databinding.ListaPatosRecyclerViewItemBinding
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 
 class PatosRvAdapter(private val context: Context) :
     RecyclerView.Adapter<PatosRvAdapter.ViewHolder>() {
 
-    var patos = MutableStateFlow<List<Pato>>(emptyList())
+     val patos = MutableStateFlow<List<Pato>>(emptyList())
 
     inner class ViewHolder(binding: ListaPatosRecyclerViewItemBinding):
         RecyclerView.ViewHolder(binding.root) {
