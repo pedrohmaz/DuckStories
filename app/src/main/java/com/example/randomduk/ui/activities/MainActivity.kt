@@ -1,5 +1,6 @@
 package com.example.randomduk.ui.activities
 
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -18,11 +20,12 @@ import com.example.randomduk.databinding.ActivityMainBinding
 import com.example.randomduk.ui.viewmodels.MainViewModel
 import kotlinx.coroutines.launch
 
+
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var viewModel: MainViewModel
-
+    private val Context.dataStore by preferencesDataStore(name = "SETTINGS")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
