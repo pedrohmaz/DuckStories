@@ -75,7 +75,6 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.salvar_pato -> {
                 viewModel.salvarPato()
-                Toast.makeText(this, "Pato salvo", Toast.LENGTH_SHORT).show()
                 true
             }
 
