@@ -7,12 +7,9 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.randomduk.data.nomesDePato
-import com.example.randomduk.database.AppDatabase
 import com.example.randomduk.database.Repository
 import com.example.randomduk.models.Pato
 import com.example.randomduk.webclient.RetrofitInit
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,11 +19,9 @@ import kotlinx.coroutines.withContext
 class MainViewModel(private val application: Application) : AndroidViewModel(application) {
 
     private val repo = Repository(application)
-    private val dao by lazy { AppDatabase.getInstance(application).dao() }
     private val service = RetrofitInit().service
     private val _url = MutableStateFlow<String?>(null)
     val url: StateFlow<String?> get() = _url
-    private val remoteDb = Firebase.firestore
     private val _nomeDoPato = MutableStateFlow<String?>(null)
     val nomeDoPato: StateFlow<String?> get() = _nomeDoPato
 
@@ -37,7 +32,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
 
     fun gerarPato() {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
+            if (repo.conectado) {
                 val response = service.chamarPato().execute()
                 response.body()?.let {
                     withContext(Dispatchers.Main) {
@@ -45,7 +40,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                     }
                 }
                 _nomeDoPato.value = nomesDePato.random()
-            } catch (e: Exception) {
+            } else {
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(
                         application,
@@ -68,18 +63,4 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
         }
 
 
-        private fun localToRemote() {
-
-            viewModelScope.launch {
-                dao.buscaPatos().collect { patos ->
-                    patos.forEach {
-                        val pato =
-                            mapOf<String, Any?>("url" to it.url, "name" to it.nome, "id" to it.id)
-                        remoteDb.collection("patos")
-                            .add(pato)
-                    }
-
-                }
-            }
-        }
 }
