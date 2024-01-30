@@ -1,9 +1,6 @@
 package com.example.randomduk.ui.viewmodels
 
 import android.app.Application
-import android.content.Context
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.randomduk.database.Repository

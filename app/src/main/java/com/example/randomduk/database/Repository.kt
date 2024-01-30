@@ -5,7 +5,10 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import com.example.randomduk.models.Pato
 import com.google.firebase.Firebase
@@ -33,15 +36,44 @@ class Repository(private val application: Application) {
     fun salvarPato(pato: Pato, scope: CoroutineScope) {
         scope.launch {
             val id = dao.salvarPato(pato)
-            val patoMap = mapOf<String, Any?>("url" to pato.url, "name" to pato.nome, "id" to id)
-            remoteDb.collection("patos").document("$id").set(patoMap).addOnFailureListener { }
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                    application,
+                    "Pato ${pato.nome} salvo",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            if (conectado) {
+                val patoMap =
+                    mapOf<String, Any?>("url" to pato.url, "name" to pato.nome, "id" to id)
+                remoteDb.collection("patos").document("$id").set(patoMap)
+            } else {
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(
+                        application,
+                        "Não foi possível atualizar a nuvem. Internet não disponível",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
+
 
     fun removerPato(pato: Pato, scope: CoroutineScope) {
         scope.launch {
             dao.removePato(pato)
-            remoteDb.collection("patos").document(pato.id.toString()).delete()
+            if (conectado) {
+                remoteDb.collection("patos").document(pato.id.toString()).delete()
+            } else {
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(
+                        application,
+                        "Não foi possível atualizar a nuvem. Internet não disponível",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 
@@ -67,7 +99,8 @@ class Repository(private val application: Application) {
             }
         }
 
-        val connectivityManager = getSystemService(application, ConnectivityManager::class.java) as ConnectivityManager
+        val connectivityManager =
+            getSystemService(application, ConnectivityManager::class.java) as ConnectivityManager
         connectivityManager.requestNetwork(networkRequest, networkCallback)
 
     }

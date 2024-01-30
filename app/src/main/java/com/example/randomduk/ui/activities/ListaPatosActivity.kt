@@ -49,7 +49,7 @@ class ListaPatosActivity : AppCompatActivity() {
                 viewModel.removerPato(item)
                 Snackbar.make(
                     binding.root,
-                    "Pato '${adapter.patos.value[pos].nome}' removido",
+                    "Pato '${item.nome}' removido",
                     Snackbar.LENGTH_SHORT
                 ).apply {
                     setAction("Undo") {
