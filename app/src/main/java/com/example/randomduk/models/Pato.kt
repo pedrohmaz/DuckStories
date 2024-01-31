@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class Pato(
     val url: String? = null,
     val nome: String,
+    val historia: String,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 
 )

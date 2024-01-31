@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.randomduk.models.Pato
 
-@Database(entities = [Pato::class], version = 1)
+@Database(entities = [Pato::class], version = 2)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun dao(): Dao

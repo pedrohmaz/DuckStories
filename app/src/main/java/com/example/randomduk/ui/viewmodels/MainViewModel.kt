@@ -24,6 +24,8 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
     val url: StateFlow<String?> get() = _url
     private val _nomeDoPato = MutableStateFlow<String?>(null)
     val nomeDoPato: StateFlow<String?> get() = _nomeDoPato
+    private val _historia = MutableStateFlow("")
+    val historia: StateFlow<String> get() = _historia
 
 
     init {
@@ -40,6 +42,10 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                     }
                 }
                 _nomeDoPato.value = nomesDePato.random()
+                _historia.value = "Ononon nonon on onononon ononon onononono onono onon onono noononon" +
+                        " onononon ononononon onononon ononon onononon onononon ononon onon onon onon onononon onon on ononon" +
+                        " onono noonon onononon onon onon onono onon noononon onononono ononon nonon onon"
+
             } else {
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(
@@ -55,8 +61,9 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
         fun salvarPato() {
             val nome: String? = _nomeDoPato.value
             val url = _url.value
+            val historia = _historia.value
             if (!nome.isNullOrEmpty() && !url.isNullOrEmpty()) {
-                repo.salvarPato(Pato(url, nome), viewModelScope)
+                repo.salvarPato(Pato(url, nome, historia), viewModelScope)
             } else {
                 Toast.makeText(application, "Não foi possível salvar", Toast.LENGTH_SHORT).show()
             }

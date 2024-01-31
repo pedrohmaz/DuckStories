@@ -26,11 +26,15 @@ class Repository(private val application: Application) {
         private set
 
     init {
-        gerenciadorDeInternet()
+       gerenciadorDeInternet()
     }
 
     fun buscarPatos(): Flow<List<Pato>> {
         return dao.buscaPatos()
+    }
+
+   suspend fun buscarUmPato(id: Int): Pato? {
+        return dao.buscaUmPato(id)
     }
 
     fun salvarPato(pato: Pato, scope: CoroutineScope) {
@@ -45,7 +49,12 @@ class Repository(private val application: Application) {
             }
             if (conectado) {
                 val patoMap =
-                    mapOf<String, Any?>("url" to pato.url, "name" to pato.nome, "id" to id)
+                    mapOf<String, Any?>(
+                        "url" to pato.url,
+                        "name" to pato.nome,
+                        "historia" to pato.historia,
+                        "id" to id
+                    )
                 remoteDb.collection("patos").document("$id").set(patoMap)
             } else {
                 Handler(Looper.getMainLooper()).post {
@@ -76,6 +85,7 @@ class Repository(private val application: Application) {
             }
         }
     }
+
 
     private fun gerenciadorDeInternet() {
 

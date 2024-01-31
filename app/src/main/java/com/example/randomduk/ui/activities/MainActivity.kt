@@ -48,7 +48,11 @@ class MainActivity : AppCompatActivity() {
                 binding.nomeDoPato.text = nomeDoPato
             }
         }
-
+        lifecycleScope.launch {
+            viewModel.historia.collect {
+                binding.historiaPato.text = it
+            }
+        }
     }
 
 

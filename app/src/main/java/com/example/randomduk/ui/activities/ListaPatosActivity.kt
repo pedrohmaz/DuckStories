@@ -1,6 +1,9 @@
 package com.example.randomduk.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -14,10 +17,11 @@ import com.example.randomduk.ui.viewmodels.ListaPatosViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
-class ListaPatosActivity : AppCompatActivity() {
+class ListaPatosActivity : AppCompatActivity(), PatosRvAdapter.OnItemCLickListener {
 
     private val binding by lazy { ActivityListaPatosBinding.inflate(layoutInflater) }
     private val viewModel by lazy { ViewModelProvider(this)[ListaPatosViewModel::class.java] }
+    val adapter = PatosRvAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,21 +29,30 @@ class ListaPatosActivity : AppCompatActivity() {
         rvSetup()
     }
 
+
     private fun rvSetup() {
         val rvPatos = binding.patosRv
-        val adapter = PatosRvAdapter(this@ListaPatosActivity)
+
         lifecycleScope.launch {
             viewModel.listaPatos.collect {
                 adapter.patos.value = it
                 rvPatos.adapter = adapter
             }
         }
-        rvPatos.layoutManager = LinearLayoutManager(this@ListaPatosActivity)
-        swipeController(adapter, rvPatos)
+        rvPatos.layoutManager = LinearLayoutManager(this)
+        swipeController(rvPatos)
+        adapter.onItemCLickListener = this
+    }
+
+    override fun onItemClick(position: Int) {
+        val id = adapter.patos.value[position].id
+        intent = Intent(this, PerfilPatoActivity::class.java)
+        intent.putExtra("ID_KEY", id)
+        Log.i("TAG", "onItemClick: $id")
+        startActivity(intent)
     }
 
     private fun swipeController(
-        adapter: PatosRvAdapter,
         rv: RecyclerView
     ) {
         val swipeDelete = object : SwipeToDeleteCallback() {

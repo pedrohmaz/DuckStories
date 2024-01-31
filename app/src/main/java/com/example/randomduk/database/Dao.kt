@@ -13,6 +13,9 @@ interface Dao {
     @Query("SELECT * FROM pato")
     fun buscaPatos(): Flow<List<Pato>>
 
+    @Query("SELECT * FROM pato WHERE id = :id" )
+    suspend fun buscaUmPato(id: Int): Pato?
+
     @Insert
     suspend fun salvarPato(pato: Pato): Long
 
