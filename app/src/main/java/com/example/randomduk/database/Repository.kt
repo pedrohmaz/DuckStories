@@ -55,6 +55,8 @@ class Repository(private val application: Application) {
                         "historia" to pato.historia,
                         "id" to id
                     )
+                    mapOf<String, Any?>("url" to pato.url, "name" to pato.nome, "id" to id)
+
                 remoteDb.collection("patos").document("$id").set(patoMap)
             } else {
                 Handler(Looper.getMainLooper()).post {
