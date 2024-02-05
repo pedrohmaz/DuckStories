@@ -18,12 +18,20 @@ val nomesDePato: List<String> = listOf(
 val localDoPato = listOf(
     "em marte",
     "em São Paulo, Brasil",
+    "no Rio de Janeiro, Brasil",
+    "em Belo Horizonte, Brasil",
     "no Havaí",
+    "no Alaska",
+    "em Nova York",
+    "em Los Angeles",
     "em Tóquio, Japão",
     "numa fazenda muito, muito distante",
     "em um laboratório secreto",
-    "no Alaska",
-    "em Florença, Itália"
+    "em Florença, Itália",
+    "em Paris, França",
+    "no reino dos patos",
+    "em Júpiter",
+    "em uma fábrica de patos andróides"
 )
 
 val fraseInicialDoPato = listOf(
@@ -34,5 +42,10 @@ val fraseInicialDoPato = listOf(
     "e adorava jogar jogos europeus de tabuleiro com foco em gestão de recursos.",
     "e sempre sonhou em ser jogador de futebol.",
     "numa família muito abastada de patos banqueiros.",
-    "e desde pequeno teve que se virar nas ruas para conseguir o almoço do dia."
+    "e desde pequeno teve que se virar nas ruas para conseguir o almoço do dia.",
+    "e aos 3 anos já tocava piano como poucos.",
+    "e tinha uma excelente alimentação baseada em frutas e vegetais.",
+    "com uma plumagem bastante curiosa: penas das cores do arco-íris.",
+    "numa ninhada de 8 patos, incluindo 3 irmãos gêmeos.",
+    "com um bico de adamantium"
 )

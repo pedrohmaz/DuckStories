@@ -42,6 +42,7 @@
         android:padding="16dp"
         android:text="TextView"
         android:textSize="18sp"
+        android:textColor="@color/dark_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/perfilFotoDoPato"
