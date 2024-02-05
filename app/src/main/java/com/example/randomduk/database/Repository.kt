@@ -22,18 +22,22 @@ class Repository(private val application: Application) {
 
     private val dao = AppDatabase.getInstance(application).dao()
     private val remoteDb = Firebase.firestore
+    private val preferences = Preferences(application)
+    private val idUnico = preferences.buscarIdUnico()
     var conectado: Boolean = false
         private set
 
     init {
-       gerenciadorDeInternet()
+        preferences.buscarIdUnico()
+        Log.i("TAG", "idUnico: ${preferences.buscarIdUnico()}")
+        gerenciadorDeInternet()
     }
 
     fun buscarPatos(): Flow<List<Pato>> {
         return dao.buscaPatos()
     }
 
-   suspend fun buscarUmPato(id: Int): Pato? {
+    suspend fun buscarUmPato(id: Int): Pato? {
         return dao.buscaUmPato(id)
     }
 
@@ -55,9 +59,9 @@ class Repository(private val application: Application) {
                         "historia" to pato.historia,
                         "id" to id
                     )
-                    mapOf<String, Any?>("url" to pato.url, "name" to pato.nome, "id" to id)
+                mapOf<String, Any?>("url" to pato.url, "name" to pato.nome, "id" to id)
 
-                remoteDb.collection("patos").document("$id").set(patoMap)
+                remoteDb.collection(idUnico).document("$id").set(patoMap)
             } else {
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(
@@ -75,7 +79,7 @@ class Repository(private val application: Application) {
         scope.launch {
             dao.removePato(pato)
             if (conectado) {
-                remoteDb.collection("patos").document(pato.id.toString()).delete()
+                remoteDb.collection(idUnico).document(pato.id.toString()).delete()
             } else {
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(

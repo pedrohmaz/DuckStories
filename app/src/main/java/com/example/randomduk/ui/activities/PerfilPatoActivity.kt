@@ -22,7 +22,6 @@ class PerfilPatoActivity : AppCompatActivity() {
     private val binding by lazy { ActivityPerfilPatoBinding.inflate(layoutInflater) }
     private val viewModel by lazy { ViewModelProvider(this)[PerfilPatoViewModel::class.java] }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -51,7 +50,7 @@ class PerfilPatoActivity : AppCompatActivity() {
                 .setView(editText.apply{this.setText(viewModel.pato.value?.historia)})
                 .setNegativeButton("Cancelar"){ _,_ -> }
                 .setPositiveButton("Salvar"){ _,_ ->
-                    viewModel.salvaPato(Pato(
+                    viewModel.editaPato(Pato(
                         viewModel.pato.value?.url,
                         viewModel.pato.value!!.nome,
                         editText.text.toString(),

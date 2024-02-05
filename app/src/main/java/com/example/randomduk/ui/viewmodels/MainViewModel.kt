@@ -6,6 +6,8 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.randomduk.data.fraseInicialDoPato
+import com.example.randomduk.data.localDoPato
 import com.example.randomduk.data.nomesDePato
 import com.example.randomduk.database.Repository
 import com.example.randomduk.models.Pato
@@ -42,9 +44,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                     }
                 }
                 _nomeDoPato.value = nomesDePato.random()
-                _historia.value = "Ononon nonon on onononon ononon onononono onono onon onono noononon" +
-                        " onononon ononononon onononon ononon onononon onononon ononon onon onon onon onononon onon on ononon" +
-                        " onono noonon onononon onon onon onono onon noononon onononono ononon nonon onon"
+                _historia.value = "${_nomeDoPato.value} nasceu ${localDoPato.random()}, ${fraseInicialDoPato.random()}..."
 
             } else {
                 Handler(Looper.getMainLooper()).post {

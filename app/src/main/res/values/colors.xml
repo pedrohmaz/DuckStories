@@ -7,4 +7,5 @@
     <color name="light_purple">#e86af0</color>
     <color name="dark_blue">#373854</color>
     <color name="light_blue">#7bb3ff</color>
+    <color name="delete_red">#FF1000</color>
 </resources>

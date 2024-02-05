@@ -8,8 +8,6 @@ import com.example.randomduk.models.Pato
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
 
 class PerfilPatoViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -25,16 +23,15 @@ class PerfilPatoViewModel(application: Application) : AndroidViewModel(applicati
 
     private fun buscaUmPato() {
         viewModelScope.launch {
-            _pato.value = id?.let { repo.buscarUmPato(id!!) }
+                _pato.value = id?.let { repo.buscarUmPato(id!!) }
         }
     }
 
-    fun salvaPato(pato: Pato) {
-        repo.salvarPato(pato, viewModelScope).let {
-            viewModelScope.launch {
-                _pato.value = repo.buscarUmPato(pato.id)
-            }
+    fun editaPato(pato: Pato) {
+        viewModelScope.launch {
+            repo.salvarPato(pato, viewModelScope)
         }
+        _pato.value = pato
     }
 
 }
