@@ -13,24 +13,24 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.randomduk.R
 import com.example.randomduk.databinding.ActivityPerfilPatoBinding
-import com.example.randomduk.models.Pato
-import com.example.randomduk.ui.viewmodels.PerfilPatoViewModel
+import com.example.randomduk.models.Duck
+import com.example.randomduk.ui.viewmodels.DuckProfileViewModel
 import kotlinx.coroutines.launch
 
-class PerfilPatoActivity : AppCompatActivity() {
+class DuckProfileActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityPerfilPatoBinding.inflate(layoutInflater) }
-    private val viewModel by lazy { ViewModelProvider(this)[PerfilPatoViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this)[DuckProfileViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         lifecycleScope.launch {
             viewModel.id = intent.getIntExtra("ID_KEY", 666)
-            viewModel.pato.collect { pato ->
-                binding.perfilNomeDoPato.text = pato?.nome
-                binding.perfilHistoriaDoPato.text = pato?.historia
-                Glide.with(this@PerfilPatoActivity).load(pato?.url).into(binding.perfilFotoDoPato)
+            viewModel.duck.collect { pato ->
+                binding.perfilNomeDoPato.text = pato?.name
+                binding.perfilHistoriaDoPato.text = pato?.story
+                Glide.with(this@DuckProfileActivity).load(pato?.url).into(binding.perfilFotoDoPato)
             }
         }
     }
@@ -47,14 +47,14 @@ class PerfilPatoActivity : AppCompatActivity() {
                 val editText = EditText(this)
                 AlertDialog.Builder(this)
                 .setTitle("Editar história")
-                .setView(editText.apply{this.setText(viewModel.pato.value?.historia)})
+                .setView(editText.apply{this.setText(viewModel.duck.value?.story)})
                 .setNegativeButton("Cancelar"){ _,_ -> }
                 .setPositiveButton("Salvar"){ _,_ ->
-                    viewModel.editaPato(Pato(
-                        viewModel.pato.value?.url,
-                        viewModel.pato.value!!.nome,
+                    viewModel.editDuck(Duck(
+                        viewModel.duck.value?.url,
+                        viewModel.duck.value!!.name,
                         editText.text.toString(),
-                        viewModel.pato.value!!.id
+                        viewModel.duck.value!!.id
                         )
                     )
                 }
@@ -63,7 +63,7 @@ class PerfilPatoActivity : AppCompatActivity() {
             }
 
             R.id.lista_patos -> {
-                val intent = Intent(this, ListaPatosActivity::class.java)
+                val intent = Intent(this, DuckListActivity::class.java)
                 startActivity(intent)
                 true
             }

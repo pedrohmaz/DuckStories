@@ -7,10 +7,10 @@ import retrofit2.create
 
 class RetrofitInit() {
 
-    val retrofit = Retrofit.Builder()
+    private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://random-d.uk/api/v2/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val service = retrofit.create(DukService::class.java)
+    val service: DukService = retrofit.create(DukService::class.java)
 }

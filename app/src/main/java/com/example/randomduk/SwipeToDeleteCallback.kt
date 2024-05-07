@@ -41,7 +41,7 @@ abstract class SwipeToDeleteCallback : ItemTouchHelper.SimpleCallback(
         val iconBottom = iconTop + icon.intrinsicHeight
 
 
-        // Draw red background
+
         background.setBounds(
             itemView.right + dX.toInt(),
             itemView.top,
@@ -50,7 +50,7 @@ abstract class SwipeToDeleteCallback : ItemTouchHelper.SimpleCallback(
         )
         background.draw(c)
 
-        // Draw trash icon
+
         val iconLeft = itemView.right - iconMargin - icon.intrinsicWidth
         val iconRight = itemView.right - iconMargin
         icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)

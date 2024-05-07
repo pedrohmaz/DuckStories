@@ -1,6 +1,6 @@
 package com.example.randomduk.webclient
 
-class PatoResposta(
+class DuckResponse(
     val url: String?
 
 ){

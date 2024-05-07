@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.randomduk.R
-import com.example.randomduk.data.nomesDePato
+import com.example.randomduk.data.duckNames
 import com.example.randomduk.databinding.ActivityMainBinding
 import com.example.randomduk.ui.viewmodels.MainViewModel
 import kotlinx.coroutines.launch
@@ -28,13 +28,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         vmSetup()
-        aoClicarBotaoQuack()
+        onQuackButtonClick()
     }
 
 
     private fun vmSetup() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        Log.i("TAG", "onCreate: ${nomesDePato.size}")
+        Log.i("TAG", "onCreate: ${duckNames.size}")
 
         lifecycleScope.launch {
             viewModel.url.collect { imageUrl ->
@@ -44,23 +44,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
         lifecycleScope.launch {
-            viewModel.nomeDoPato.collect { nomeDoPato ->
+            viewModel.duckName.collect { nomeDoPato ->
                 binding.nomeDoPato.text = nomeDoPato
             }
         }
         lifecycleScope.launch {
-            viewModel.historia.collect {
+            viewModel.story.collect {
                 binding.historiaPato.text = it
             }
         }
     }
 
 
-    private fun aoClicarBotaoQuack() {
+    private fun onQuackButtonClick() {
         binding.botaoPato.setOnClickListener {
             val quackSound = MediaPlayer.create(this, R.raw.quack_sound)
             quackSound.start()
-            viewModel.gerarPato()
+            viewModel.generateDuck()
         }
     }
 
@@ -75,12 +75,12 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.salvar_pato -> {
-                viewModel.salvarPato()
+                viewModel.saveDuck()
                 true
             }
 
             R.id.lista_patos -> {
-                startActivity(Intent(this, ListaPatosActivity::class.java))
+                startActivity(Intent(this, DuckListActivity::class.java))
                 true
             }
 

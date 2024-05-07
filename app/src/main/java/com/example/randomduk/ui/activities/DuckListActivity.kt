@@ -11,16 +11,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.randomduk.SwipeToDeleteCallback
 import com.example.randomduk.databinding.ActivityListaPatosBinding
-import com.example.randomduk.ui.PatosRvAdapter
-import com.example.randomduk.ui.viewmodels.ListaPatosViewModel
+import com.example.randomduk.ui.DucksRvAdapter
+import com.example.randomduk.ui.viewmodels.DuckListViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
-class ListaPatosActivity : AppCompatActivity(), PatosRvAdapter.OnItemCLickListener {
+class DuckListActivity : AppCompatActivity(), DucksRvAdapter.OnItemCLickListener {
 
     private val binding by lazy { ActivityListaPatosBinding.inflate(layoutInflater) }
-    private val viewModel by lazy { ViewModelProvider(this)[ListaPatosViewModel::class.java] }
-    val adapter = PatosRvAdapter(this)
+    private val viewModel by lazy { ViewModelProvider(this)[DuckListViewModel::class.java] }
+    val adapter = DucksRvAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,22 +30,22 @@ class ListaPatosActivity : AppCompatActivity(), PatosRvAdapter.OnItemCLickListen
 
 
     private fun rvSetup() {
-        val rvPatos = binding.patosRv
+        val rvDucks = binding.patosRv
 
         lifecycleScope.launch {
-            viewModel.listaPatos.collect {
-                adapter.patos.value = it
-                rvPatos.adapter = adapter
+            viewModel.duckList.collect {
+                adapter.ducks.value = it
+                rvDucks.adapter = adapter
             }
         }
-        rvPatos.layoutManager = LinearLayoutManager(this)
-        swipeController(rvPatos)
+        rvDucks.layoutManager = LinearLayoutManager(this)
+        swipeController(rvDucks)
         adapter.onItemCLickListener = this
     }
 
     override fun onItemClick(position: Int) {
-        val id = adapter.patos.value[position].id
-        intent = Intent(this, PerfilPatoActivity::class.java)
+        val id = adapter.ducks.value[position].id
+        intent = Intent(this, DuckProfileActivity::class.java)
         intent.putExtra("ID_KEY", id)
         Log.i("TAG", "onItemClick: $id")
         startActivity(intent)
@@ -57,15 +57,15 @@ class ListaPatosActivity : AppCompatActivity(), PatosRvAdapter.OnItemCLickListen
         val swipeDelete = object : SwipeToDeleteCallback() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val pos = viewHolder.adapterPosition
-                val item = adapter.patos.value[pos]
-                viewModel.removerPato(item)
+                val item = adapter.ducks.value[pos]
+                viewModel.removeDuck(item)
                 Snackbar.make(
                     binding.root,
-                    "Pato '${item.nome}' removido",
+                    "Duck '${item.name}' removed",
                     Snackbar.LENGTH_SHORT
                 ).apply {
                     setAction("Undo") {
-                        viewModel.salvarPato(item)
+                        viewModel.saveDuck(item)
                     }
                     show()
                 }

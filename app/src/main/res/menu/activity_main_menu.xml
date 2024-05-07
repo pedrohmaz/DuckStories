@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/salvar_pato"
         android:icon="@drawable/icon_salvar"
-        android:title="Salvar pato"
+        android:title="Save duck"
         app:showAsAction="ifRoom" />
     <item android:id="@+id/lista_patos"
         android:icon="@drawable/icon_lista"
-        android:title="Lista de Patos"
+        android:title="Duck list"
         app:showAsAction="ifRoom"/>
 </menu>

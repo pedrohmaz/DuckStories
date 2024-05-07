@@ -10,7 +10,7 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
-import com.example.randomduk.models.Pato
+import com.example.randomduk.models.Duck
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.CoroutineScope
@@ -23,50 +23,50 @@ class Repository(private val application: Application) {
     private val dao = AppDatabase.getInstance(application).dao()
     private val remoteDb = Firebase.firestore
     private val preferences = Preferences(application)
-    private val idUnico = preferences.buscarIdUnico()
-    var conectado: Boolean = false
+    private val uniqueId = preferences.searchUniqueId()
+    var connected: Boolean = false
         private set
 
     init {
-        preferences.buscarIdUnico()
-        Log.i("TAG", "idUnico: ${preferences.buscarIdUnico()}")
-        gerenciadorDeInternet()
+        preferences.searchUniqueId()
+        Log.i("TAG", "idUnico: ${preferences.searchUniqueId()}")
+        internetManager()
     }
 
-    fun buscarPatos(): Flow<List<Pato>> {
-        return dao.buscaPatos()
+    fun searchDucks(): Flow<List<Duck>> {
+        return dao.searchDucks()
     }
 
-    suspend fun buscarUmPato(id: Int): Pato? {
-        return dao.buscaUmPato(id)
+    suspend fun searchADuck(id: Int): Duck? {
+        return dao.searchADuck(id)
     }
 
-    fun salvarPato(pato: Pato, scope: CoroutineScope) {
+    fun saveDuck(duck: Duck, scope: CoroutineScope) {
         scope.launch {
-            val id = dao.salvarPato(pato)
+            val id = dao.saveDuck(duck)
             Handler(Looper.getMainLooper()).post {
                 Toast.makeText(
                     application,
-                    "Pato ${pato.nome} salvo",
+                    "Pato ${duck.name} salvo",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            if (conectado) {
-                val patoMap =
+            if (connected) {
+                val duckMap =
                     mapOf<String, Any?>(
-                        "url" to pato.url,
-                        "name" to pato.nome,
-                        "historia" to pato.historia,
+                        "url" to duck.url,
+                        "name" to duck.name,
+                        "story" to duck.story,
                         "id" to id
                     )
-                mapOf<String, Any?>("url" to pato.url, "name" to pato.nome, "id" to id)
+                mapOf<String, Any?>("url" to duck.url, "name" to duck.name, "id" to id)
 
-                remoteDb.collection(idUnico).document("$id").set(patoMap)
+                remoteDb.collection(uniqueId).document("$id").set(duckMap)
             } else {
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(
                         application,
-                        "Não foi possível atualizar a nuvem. Internet não disponível",
+                        "Could not update the cloud. No internet connection.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -75,11 +75,11 @@ class Repository(private val application: Application) {
     }
 
 
-    fun removerPato(pato: Pato, scope: CoroutineScope) {
+    fun removeDuck(duck: Duck, scope: CoroutineScope) {
         scope.launch {
-            dao.removePato(pato)
-            if (conectado) {
-                remoteDb.collection(idUnico).document(pato.id.toString()).delete()
+            dao.removeDuck(duck)
+            if (connected) {
+                remoteDb.collection(uniqueId).document(duck.id.toString()).delete()
             } else {
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(
@@ -93,7 +93,7 @@ class Repository(private val application: Application) {
     }
 
 
-    private fun gerenciadorDeInternet() {
+    private fun internetManager() {
 
         val networkRequest = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
@@ -104,14 +104,14 @@ class Repository(private val application: Application) {
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onLost(network: Network) {
                 super.onLost(network)
-                Log.i("TAG", "onLost: Internet perdida")
-                conectado = false
+                Log.i("TAG", "onLost: Internet unavailable")
+                connected = false
             }
 
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
-                Log.i("TAG", "onAvailable: Internet Acessada")
-                conectado = true
+                Log.i("TAG", "onAvailable: Internet available")
+                connected = true
             }
         }
 

@@ -4,34 +4,34 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.randomduk.database.Repository
-import com.example.randomduk.models.Pato
+import com.example.randomduk.models.Duck
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class PerfilPatoViewModel(application: Application) : AndroidViewModel(application) {
+class DuckProfileViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repo by lazy { Repository(application) }
     var id: Int? = null
 
-    private val _pato = MutableStateFlow<Pato?>(null)
-    val pato: StateFlow<Pato?> get() = _pato
+    private val _duck = MutableStateFlow<Duck?>(null)
+    val duck: StateFlow<Duck?> get() = _duck
 
     init {
-        buscaUmPato()
+        searchADuck()
     }
 
-    private fun buscaUmPato() {
+    private fun searchADuck() {
         viewModelScope.launch {
-                _pato.value = id?.let { repo.buscarUmPato(id!!) }
+                _duck.value = id?.let { repo.searchADuck(id!!) }
         }
     }
 
-    fun editaPato(pato: Pato) {
+    fun editDuck(duck: Duck) {
         viewModelScope.launch {
-            repo.salvarPato(pato, viewModelScope)
+            repo.saveDuck(duck, viewModelScope)
         }
-        _pato.value = pato
+        _duck.value = duck
     }
 
 }

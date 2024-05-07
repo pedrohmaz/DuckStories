@@ -12,18 +12,18 @@ class Preferences(private val application: Application) {
         Context.MODE_PRIVATE
     )
 
-    fun buscarIdUnico(): String {
-        var idUnico = sharedPreferences.getString("idUnico", null)
+    fun searchUniqueId(): String {
+        var uniqueId = sharedPreferences.getString("uniqueId", null)
 
-        if (idUnico == null) {
-            idUnico = gerarIdUnico()
-            sharedPreferences.edit().putString("idUnico", idUnico).apply()
+        if (uniqueId == null) {
+            uniqueId = generateUniqueId()
+            sharedPreferences.edit().putString("uniqueId", uniqueId).apply()
         }
 
-        return idUnico
+        return uniqueId
     }
 
-    private fun gerarIdUnico(): String {
+    private fun generateUniqueId(): String {
         return UUID.randomUUID().toString()
     }
 }

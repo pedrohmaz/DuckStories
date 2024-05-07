@@ -7,10 +7,10 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.randomduk.data.fraseInicialDoPato
-import com.example.randomduk.data.localDoPato
-import com.example.randomduk.data.nomesDePato
+import com.example.randomduk.data.duckPlaces
+import com.example.randomduk.data.duckNames
 import com.example.randomduk.database.Repository
-import com.example.randomduk.models.Pato
+import com.example.randomduk.models.Duck
 import com.example.randomduk.webclient.RetrofitInit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,33 +24,33 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
     private val service = RetrofitInit().service
     private val _url = MutableStateFlow<String?>(null)
     val url: StateFlow<String?> get() = _url
-    private val _nomeDoPato = MutableStateFlow<String?>(null)
-    val nomeDoPato: StateFlow<String?> get() = _nomeDoPato
-    private val _historia = MutableStateFlow("")
-    val historia: StateFlow<String> get() = _historia
+    private val _duckName = MutableStateFlow<String?>(null)
+    val duckName: StateFlow<String?> get() = _duckName
+    private val _story = MutableStateFlow("")
+    val story: StateFlow<String> get() = _story
 
 
     init {
-        gerarPato()
+        generateDuck()
     }
 
-    fun gerarPato() {
+    fun generateDuck() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (repo.conectado) {
-                val response = service.chamarPato().execute()
+            if (repo.connected) {
+                val response = service.callDuck().execute()
                 response.body()?.let {
                     withContext(Dispatchers.Main) {
                         _url.value = response.body()!!.url
                     }
                 }
-                _nomeDoPato.value = nomesDePato.random()
-                _historia.value = "${_nomeDoPato.value} nasceu ${localDoPato.random()}, ${fraseInicialDoPato.random()}..."
+                _duckName.value = duckNames.random()
+                _story.value = "${_duckName.value} was born ${duckPlaces.random()}, ${fraseInicialDoPato.random()}..."
 
             } else {
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(
                         application,
-                        "Não foi possível gerar pato. Internet não disponível",
+                        "Could not generate duck. Internet unavailable.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -58,14 +58,14 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
         }
     }
 
-        fun salvarPato() {
-            val nome: String? = _nomeDoPato.value
+        fun saveDuck() {
+            val name: String? = _duckName.value
             val url = _url.value
-            val historia = _historia.value
-            if (!nome.isNullOrEmpty() && !url.isNullOrEmpty()) {
-                repo.salvarPato(Pato(url, nome, historia), viewModelScope)
+            val story = _story.value
+            if (!name.isNullOrEmpty() && !url.isNullOrEmpty()) {
+                repo.saveDuck(Duck(url, name, story), viewModelScope)
             } else {
-                Toast.makeText(application, "Não foi possível salvar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(application, "Unable to save duck.", Toast.LENGTH_SHORT).show()
             }
         }
 

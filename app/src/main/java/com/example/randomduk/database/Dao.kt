@@ -5,23 +5,23 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.randomduk.models.Pato
+import com.example.randomduk.models.Duck
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface Dao {
 
-    @Query("SELECT * FROM pato")
-    fun buscaPatos(): Flow<List<Pato>>
+    @Query("SELECT * FROM duck")
+    fun searchDucks(): Flow<List<Duck>>
 
-    @Query("SELECT * FROM pato WHERE id = :id" )
-    suspend fun buscaUmPato(id: Int): Pato?
+    @Query("SELECT * FROM duck WHERE id = :id" )
+    suspend fun searchADuck(id: Int): Duck?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun salvarPato(pato: Pato): Long
+    suspend fun saveDuck(duck: Duck): Long
 
     @Delete
-    suspend fun removePato(pato: Pato)
+    suspend fun removeDuck(duck: Duck)
 
 
 
